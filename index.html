@@ -21,13 +21,15 @@
     --blue: #4a9eff;
     --green: #3ddc84;
     --purple: #a78bfa;
+    --pink: #f472b6;
+    --yellow: #fbbf24;
+    --teal: #2dd4bf;
     --radius: 16px;
     --mono: 'Space Mono', monospace;
     --sans: 'DM Sans', -apple-system, sans-serif;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -38,7 +40,6 @@
     overflow-x: hidden;
   }
 
-  /* Noise texture overlay */
   body::before {
     content: '';
     position: fixed;
@@ -55,9 +56,7 @@
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     z-index: 100;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -70,7 +69,6 @@
     font-weight: 700;
     font-size: 1.1rem;
     letter-spacing: -0.5px;
-    color: var(--text);
   }
   .logo span { color: var(--accent); }
 
@@ -155,7 +153,7 @@
     opacity: 0.4;
   }
 
-  /* === APP GRID === */
+  /* === SECTIONS === */
   .section {
     padding: 80px 24px;
     max-width: 1100px;
@@ -175,103 +173,239 @@
     font-size: clamp(1.6rem, 3vw, 2.2rem);
     font-weight: 700;
     letter-spacing: -0.02em;
-    margin-bottom: 48px;
+    margin-bottom: 16px;
   }
 
+  .section-subtitle {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 48px;
+    max-width: 520px;
+  }
+
+  /* === FEATURED APP === */
+  .featured {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .featured:hover {
+    border-color: rgba(255, 107, 61, 0.4);
+  }
+  .featured::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), #ff9a6b);
+  }
+  .featured::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 107, 61, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .featured-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .featured-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .featured-meta { flex: 1; }
+
+  .featured-meta h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .featured-desc {
+    font-size: 1rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .featured-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .store-btn.ios {
+    background: var(--text);
+    color: var(--bg);
+  }
+  .store-btn.ios:hover {
+    background: #fff;
+    transform: translateY(-2px);
+  }
+
+  .store-btn.android {
+    background: rgba(61, 220, 132, 0.15);
+    color: var(--green);
+    border: 1px solid rgba(61, 220, 132, 0.25);
+  }
+  .store-btn.android:hover {
+    background: rgba(61, 220, 132, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .available-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--green);
+    background: rgba(61, 220, 132, 0.1);
+    border: 1px solid rgba(61, 220, 132, 0.2);
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+  .available-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* === APP GRID === */
   .app-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
+    gap: 16px;
   }
 
   .app-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 28px;
+    padding: 24px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    display: block;
   }
   .app-card:hover {
     background: var(--surface-hover);
-    border-color: rgba(255, 107, 61, 0.3);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.25);
   }
-  .app-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--card-accent, var(--accent));
-    opacity: 0;
-    transition: opacity 0.3s;
+
+  .app-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
   }
-  .app-card:hover::after { opacity: 1; }
 
   .app-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 18px;
-    position: relative;
+    font-size: 1.2rem;
+    flex-shrink: 0;
   }
 
   .app-card h3 {
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 4px;
     letter-spacing: -0.01em;
   }
 
   .app-platform {
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     color: var(--text-dim);
-    margin-bottom: 12px;
+    margin-top: 2px;
   }
 
   .app-desc {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-dim);
-    line-height: 1.5;
+    line-height: 1.55;
   }
 
   .app-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-top: 16px;
+    margin-top: 14px;
   }
 
   .app-tag {
     font-family: var(--mono);
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    padding: 3px 10px;
+    padding: 3px 9px;
     border-radius: 100px;
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--border);
     color: var(--text-dim);
   }
 
-  .tag-new {
-    background: var(--accent-soft);
-    border-color: rgba(255, 107, 61, 0.25);
-    color: var(--accent);
+  .personal-badge {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 9px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
   }
 
   /* === ABOUT === */
@@ -317,7 +451,6 @@
     font-size: 0.75rem;
     color: var(--text-dim);
     margin-top: 4px;
-    letter-spacing: 0.02em;
   }
 
   /* === PRIVACY === */
@@ -343,7 +476,7 @@
   .privacy-card p {
     color: var(--text-dim);
     font-size: 0.9rem;
-    max-width: 500px;
+    max-width: 540px;
     margin: 0 auto;
     line-height: 1.6;
   }
@@ -374,10 +507,13 @@
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
   @keyframes float {
     0%, 100% { transform: translateX(-50%) translateY(0); }
     50% { transform: translateX(-50%) translateY(8px); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
   }
 
   /* === RESPONSIVE === */
@@ -387,21 +523,15 @@
     .section { padding: 60px 20px; }
     .app-grid { grid-template-columns: 1fr; }
     .about-content { grid-template-columns: 1fr; }
-    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .featured { padding: 28px; }
+    .featured-header { flex-direction: column; gap: 16px; }
+    .featured-links { flex-direction: column; }
+    .store-btn { justify-content: center; }
   }
-
   @media (max-width: 480px) {
     nav { display: none; }
     .hero h1 { font-size: 2rem; }
   }
-
-  /* Specific app accent colors */
-  .card-orange { --card-accent: #ff6b3d; }
-  .card-blue { --card-accent: #4a9eff; }
-  .card-green { --card-accent: #3ddc84; }
-  .card-purple { --card-accent: #a78bfa; }
-  .card-pink { --card-accent: #f472b6; }
-  .card-yellow { --card-accent: #fbbf24; }
 </style>
 </head>
 <body>
@@ -418,7 +548,7 @@
 <section class="hero">
   <div class="hero-badge">Indie Developer — Bangkok</div>
   <h1>Apps for people<br>who <em>tinker</em></h1>
-  <p>Crafting iOS, tvOS & macOS apps that fill the gaps left by mainstream software.</p>
+  <p>Crafting iOS, tvOS, macOS & Android apps that fill the gaps left by mainstream software.</p>
   <div class="hero-arrow">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
   </div>
@@ -427,74 +557,186 @@
 <section class="section" id="apps">
   <div class="section-label">Portfolio</div>
   <h2 class="section-title">Apps</h2>
+  <p class="section-subtitle">A mix of publicly available apps and personal projects built for my own needs.</p>
+
+  <!-- Featured: Bar Party!! -->
+  <div class="featured">
+    <div class="featured-header">
+      <div class="featured-icon">🎲</div>
+      <div class="featured-meta">
+        <h3>Bar Party!!</h3>
+        <div class="app-platform">iOS · Android</div>
+      </div>
+      <div class="available-badge">Available Now</div>
+    </div>
+    <p class="featured-desc">Party games designed for bars and gatherings. Pass the phone around and play Jackpot, Connect Four, or Barrel Roulette. Supports 6 languages — perfect for international crowds.</p>
+    <div class="featured-links">
+      <a href="#" class="store-btn ios">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83"/><path d="M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11"/></svg>
+        App Store
+      </a>
+      <a href="#" class="store-btn android">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 2.226a.75.75 0 010 1.06l-1.97 1.97A7.462 7.462 0 0119 11.5V13h1.25a.75.75 0 010 1.5H19v5.75a1.75 1.75 0 01-1.75 1.75H6.75A1.75 1.75 0 015 20.25V14.5H3.75a.75.75 0 010-1.5H5V11.5a7.462 7.462 0 013.447-6.244l-1.97-1.97a.75.75 0 111.06-1.06l2.197 2.197A7.428 7.428 0 0112 3.75c.94 0 1.838.174 2.666.473l2.197-2.197a.75.75 0 011.06 0zM9.5 10.5a1 1 0 100-2 1 1 0 000 2zm5 0a1 1 0 100-2 1 1 0 000 2z"/></svg>
+        Google Play
+      </a>
+    </div>
+    <div class="app-tags" style="margin-top: 20px;">
+      <span class="app-tag">SpriteKit</span>
+      <span class="app-tag">SwiftUI</span>
+      <span class="app-tag">Kotlin</span>
+      <span class="app-tag">AdMob</span>
+      <span class="app-tag">6 Languages</span>
+    </div>
+  </div>
+
+  <!-- Personal Projects -->
+  <div style="margin-bottom: 20px;">
+    <div class="section-label">Personal Projects</div>
+  </div>
   <div class="app-grid">
 
-    <a class="app-card card-orange" href="#">
-      <div class="app-icon" style="background: var(--accent-soft);">🎲</div>
-      <h3>Bar Party!!</h3>
-      <div class="app-platform">iOS · Android</div>
-      <p class="app-desc">Party games for bars and gatherings. Jackpot, Connect Four, Barrel Roulette — pass the phone and play. 6 languages supported.</p>
-      <div class="app-tags">
-        <span class="app-tag tag-new">New</span>
-        <span class="app-tag">SpriteKit</span>
-        <span class="app-tag">SwiftUI</span>
+    <div class="app-card">
+      <div class="app-card-header">
+        <div class="app-icon" style="background: rgba(244, 114, 182, 0.12);">📋</div>
+        <div>
+          <h3>まるちビュ〜ワ〜</h3>
+          <div class="app-platform">iOS</div>
+        </div>
       </div>
-    </a>
-
-    <a class="app-card card-blue" href="#">
-      <div class="app-icon" style="background: rgba(74, 158, 255, 0.12);">📺</div>
-      <h3>MultiTV</h3>
-      <div class="app-platform">tvOS · iOS</div>
-      <p class="app-desc">IPTV player with live comment overlay, channel auto-failover, Japanese-style vertical EPG, and multi-playlist support.</p>
-      <div class="app-tags">
-        <span class="app-tag">AVPlayer</span>
-        <span class="app-tag">WebSocket</span>
-      </div>
-    </a>
-
-    <a class="app-card card-purple" href="#">
-      <div class="app-icon" style="background: rgba(167, 139, 250, 0.12);">📡</div>
-      <h3>Radireko</h3>
-      <div class="app-platform">iOS · CarPlay</div>
-      <p class="app-desc">Radiko streaming and recording app. Server-side recording, CarPlay support, and Live Activities on your Lock Screen.</p>
-      <div class="app-tags">
-        <span class="app-tag">CarPlay</span>
-        <span class="app-tag">Live Activity</span>
-      </div>
-    </a>
-
-    <a class="app-card card-green" href="#">
-      <div class="app-icon" style="background: rgba(61, 220, 132, 0.12);">🪶</div>
-      <h3>K.A.R.A.S.U</h3>
-      <div class="app-platform">iOS · iPadOS · macOS</div>
-      <p class="app-desc">RSS reader with dark reading mode, ad blocking, iCloud sync, and OPML support. Built for focused, distraction-free reading.</p>
-      <div class="app-tags">
-        <span class="app-tag">SwiftData</span>
-        <span class="app-tag">CloudKit</span>
-      </div>
-    </a>
-
-    <a class="app-card card-pink" href="#">
-      <div class="app-icon" style="background: rgba(244, 114, 182, 0.12);">📋</div>
-      <h3>まるちビュ〜ワ〜</h3>
-      <div class="app-platform">iOS</div>
       <p class="app-desc">Multi-board viewer for 5ch, Bakusai, and X. NG filtering, in-app posting, iCloud bookmark sync, and thread navigation.</p>
       <div class="app-tags">
+        <span class="personal-badge">Personal</span>
         <span class="app-tag">SwiftUI</span>
         <span class="app-tag">iCloud</span>
       </div>
-    </a>
+    </div>
 
-    <a class="app-card card-yellow" href="#">
-      <div class="app-icon" style="background: rgba(251, 191, 36, 0.12);">💱</div>
-      <h3>ExchangeRateWidget</h3>
-      <div class="app-platform">iOS · watchOS</div>
-      <p class="app-desc">Glanceable JPY / THB / MYR exchange rates on your Home Screen and Apple Watch complication.</p>
+    <div class="app-card">
+      <div class="app-card-header">
+        <div class="app-icon" style="background: rgba(74, 158, 255, 0.12);">📺</div>
+        <div>
+          <h3>MultiTV</h3>
+          <div class="app-platform">tvOS · iOS</div>
+        </div>
+      </div>
+      <p class="app-desc">IPTV player with live comment overlay, channel auto-failover, vertical EPG, and multi-playlist support.</p>
       <div class="app-tags">
+        <span class="personal-badge">Personal</span>
+        <span class="app-tag">AVPlayer</span>
+        <span class="app-tag">WebSocket</span>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-card-header">
+        <div class="app-icon" style="background: rgba(61, 220, 132, 0.12);">🪶</div>
+        <div>
+          <h3>K.A.R.A.S.U</h3>
+          <div class="app-platform">iOS · iPadOS · macOS</div>
+        </div>
+      </div>
+      <p class="app-desc">RSS reader with dark reading mode, ad blocking, iCloud sync, and OPML support. Built for focused reading.</p>
+      <div class="app-tags">
+        <span class="personal-badge">Personal</span>
+        <span class="app-tag">SwiftData</span>
+        <span class="app-tag">CloudKit</span>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-card-header">
+        <div class="app-icon" style="background: rgba(167, 139, 250, 0.12);">📚</div>
+        <div>
+          <h3>こみこれ</h3>
+          <div class="app-platform">iPadOS</div>
+        </div>
+      </div>
+      <p class="app-desc">Comic collection viewer with iCloud Drive integration, drag-and-drop sorting, RAR/CBR support, and series grouping.</p>
+      <div class="app-tags">
+        <span class="personal-badge">Personal</span>
+        <span class="app-tag">SwiftData</span>
+        <span class="app-tag">ZIP</span>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-card-header">
+        <div class="app-icon" style="background: rgba(251, 191, 36, 0.12);">🎬</div>
+        <div>
+          <h3>MissPlayer</h3>
+          <div class="app-platform">tvOS · iOS</div>
+        </div>
+      </div>
+      <p class="app-desc">Video streaming player with download support, offline playback, custom image caching, and a dedicated tvOS interface.</p>
+      <div class="app-tags">
+        <span class="personal-badge">Personal</span>
+        <span class="app-tag">SwiftData</span>
+        <span class="app-tag">AVKit</span>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-card-header">
+        <div class="app-icon" style="background: rgba(255, 107, 61, 0.12);">🤖</div>
+        <div>
+          <h3>MAGI System</h3>
+          <div class="app-platform">Web App</div>
+        </div>
+      </div>
+      <p class="app-desc">Multi-AI consensus decision engine. Routes queries through Claude, DeepSeek, and Gemini with web search integration.</p>
+      <div class="app-tags">
+        <span class="personal-badge">Personal</span>
+        <span class="app-tag">Node.js</span>
+        <span class="app-tag">React</span>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-card-header">
+        <div class="app-icon" style="background: rgba(45, 212, 191, 0.12);">⏱️</div>
+        <div>
+          <h3>SketchTimer</h3>
+          <div class="app-platform">Windows · macOS</div>
+        </div>
+      </div>
+      <p class="app-desc">Croquis practice timer for artists. Cross-platform desktop app with automated builds via GitHub Actions.</p>
+      <div class="app-tags">
+        <span class="personal-badge">Personal</span>
+        <span class="app-tag">Python</span>
+        <span class="app-tag">PySide6</span>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-card-header">
+        <div class="app-icon" style="background: rgba(251, 191, 36, 0.12);">💱</div>
+        <div>
+          <h3>ExchangeWidget</h3>
+          <div class="app-platform">iOS · watchOS</div>
+        </div>
+      </div>
+      <p class="app-desc">Glanceable JPY / THB / MYR exchange rates on your Home Screen widget and Apple Watch complication.</p>
+      <div class="app-tags">
+        <span class="personal-badge">Personal</span>
         <span class="app-tag">WidgetKit</span>
         <span class="app-tag">WatchOS</span>
       </div>
-    </a>
+    </div>
+
+    <div class="app-card">
+      <div class="app-card-header">
+        <div class="app-icon" style="background: rgba(74, 158, 255, 0.12);">💰</div>
+        <div>
+          <h3>CreMane</h3>
+          <div class="app-platform">iOS</div>
+        </div>
+      </div>
+      <p class="app-desc">Personal finance and expense tracking tool built for everyday money management.</p>
+      <div class="app-tags">
+        <span class="personal-badge">Personal</span>
+        <span class="app-tag">SwiftUI</span>
+      </div>
+    </div>
 
   </div>
 </section>
@@ -506,13 +748,13 @@
     <div class="about-text">
       <p>I'm an indie developer based in <strong>Bangkok, Thailand</strong>, building apps that solve my own problems — and hopefully yours too.</p>
       <br>
-      <p>Most of my apps are born from frustrations with existing tools. Whether it's a radio app that actually records, a board viewer that works across multiple sites, or a party game you can play at a bar — each app starts with a simple "why doesn't this exist?"</p>
+      <p>Most of my apps are born from frustrations with existing tools. Whether it's a board viewer that works across multiple sites, a party game you can play at a bar, or a three-way AI decision engine — each app starts with a simple "why doesn't this exist?"</p>
       <br>
       <p>Built with <strong>Swift, SwiftUI, and SwiftData</strong>, deeply integrated with Apple frameworks like CloudKit, CarPlay, WidgetKit, and Live Activities.</p>
     </div>
     <div class="stat-grid">
       <div class="stat-card">
-        <div class="stat-value">10+</div>
+        <div class="stat-value">10</div>
         <div class="stat-label">Apps Built</div>
       </div>
       <div class="stat-card">
@@ -535,8 +777,10 @@
   <div class="privacy-card">
     <h3>Privacy Policy</h3>
     <p>My apps respect your privacy. They do not collect personal data, do not track you, and do not share information with third parties. Some apps use local storage (iCloud sync, SwiftData) solely for your convenience — your data stays yours.</p>
-    <br>
-    <p style="color: var(--text-dim); font-size: 0.8rem;">For app-specific privacy details, please refer to each app's listing on the App Store.</p>
+    <div style="margin-top: 24px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+      <a href="https://kiyo-dev.github.io/bar-party-privacy/privacy-policy.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,107,61,0.25); background: rgba(255,107,61,0.06); transition: all 0.2s;">🎲 Bar Party!! Privacy Policy <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </div>
+    <p style="color: var(--text-dim); font-size: 0.78rem; margin-top: 16px;">Other app-specific policies will be added here as apps become publicly available.</p>
   </div>
 </section>
 
