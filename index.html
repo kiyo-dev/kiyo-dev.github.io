@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kiyo-dev — iOS & tvOS Apps</title>
+<meta name="description" content="Indie apps crafted in Bangkok. Party games, readers, streaming tools, and more for Apple platforms.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --surface: #141418;
+    --surface-hover: #1c1c22;
+    --border: #2a2a32;
+    --text: #e8e6e3;
+    --text-dim: #8a8890;
+    --accent: #ff6b3d;
+    --accent-soft: rgba(255, 107, 61, 0.12);
+    --blue: #4a9eff;
+    --green: #3ddc84;
+    --purple: #a78bfa;
+    --radius: 16px;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* === HEADER === */
+  header {
+    padding: 20px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(10, 10, 12, 0.8);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .logo span { color: var(--accent); }
+
+  nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-left: 28px;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+  }
+  nav a:hover { color: var(--text); }
+
+  /* === HERO === */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 107, 61, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 107, 61, 0.2);
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease-out;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    max-width: 700px;
+    animation: fadeUp 0.8s ease-out 0.1s both;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+  }
+
+  .hero p {
+    margin-top: 24px;
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    max-width: 480px;
+    animation: fadeUp 0.8s ease-out 0.2s both;
+  }
+
+  .hero-arrow {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: float 2s ease-in-out infinite;
+    color: var(--text-dim);
+    opacity: 0.4;
+  }
+
+  /* === APP GRID === */
+  .section {
+    padding: 80px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 48px;
+  }
+
+  .app-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .app-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .app-card:hover {
+    background: var(--surface-hover);
+    border-color: rgba(255, 107, 61, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+  .app-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--accent));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .app-card:hover::after { opacity: 1; }
+
+  .app-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+    position: relative;
+  }
+
+  .app-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .app-platform {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  .app-desc {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .app-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .app-tag {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .tag-new {
+    background: var(--accent-soft);
+    border-color: rgba(255, 107, 61, 0.25);
+    color: var(--accent);
+  }
+
+  /* === ABOUT === */
+  .about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .about-text {
+    font-size: 1rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+  .about-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  /* === PRIVACY === */
+  .privacy-section {
+    padding: 48px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .privacy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: center;
+  }
+
+  .privacy-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+
+  .privacy-card p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* === FOOTER === */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+  footer a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  footer a:hover { color: var(--text); }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+
+  /* === ANIMATIONS === */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    header { padding: 16px 20px; }
+    nav a { margin-left: 16px; font-size: 0.78rem; }
+    .section { padding: 60px 20px; }
+    .app-grid { grid-template-columns: 1fr; }
+    .about-content { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    nav { display: none; }
+    .hero h1 { font-size: 2rem; }
+  }
+
+  /* Specific app accent colors */
+  .card-orange { --card-accent: #ff6b3d; }
+  .card-blue { --card-accent: #4a9eff; }
+  .card-green { --card-accent: #3ddc84; }
+  .card-purple { --card-accent: #a78bfa; }
+  .card-pink { --card-accent: #f472b6; }
+  .card-yellow { --card-accent: #fbbf24; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">kiyo<span>.</span>dev</div>
+  <nav>
+    <a href="#apps">Apps</a>
+    <a href="#about">About</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">Indie Developer — Bangkok</div>
+  <h1>Apps for people<br>who <em>tinker</em></h1>
+  <p>Crafting iOS, tvOS & macOS apps that fill the gaps left by mainstream software.</p>
+  <div class="hero-arrow">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<section class="section" id="apps">
+  <div class="section-label">Portfolio</div>
+  <h2 class="section-title">Apps</h2>
+  <div class="app-grid">
+
+    <a class="app-card card-orange" href="#">
+      <div class="app-icon" style="background: var(--accent-soft);">🎲</div>
+      <h3>Bar Party!!</h3>
+      <div class="app-platform">iOS · Android</div>
+      <p class="app-desc">Party games for bars and gatherings. Jackpot, Connect Four, Barrel Roulette — pass the phone and play. 6 languages supported.</p>
+      <div class="app-tags">
+        <span class="app-tag tag-new">New</span>
+        <span class="app-tag">SpriteKit</span>
+        <span class="app-tag">SwiftUI</span>
+      </div>
+    </a>
+
+    <a class="app-card card-blue" href="#">
+      <div class="app-icon" style="background: rgba(74, 158, 255, 0.12);">📺</div>
+      <h3>MultiTV</h3>
+      <div class="app-platform">tvOS · iOS</div>
+      <p class="app-desc">IPTV player with live comment overlay, channel auto-failover, Japanese-style vertical EPG, and multi-playlist support.</p>
+      <div class="app-tags">
+        <span class="app-tag">AVPlayer</span>
+        <span class="app-tag">WebSocket</span>
+      </div>
+    </a>
+
+    <a class="app-card card-purple" href="#">
+      <div class="app-icon" style="background: rgba(167, 139, 250, 0.12);">📡</div>
+      <h3>Radireko</h3>
+      <div class="app-platform">iOS · CarPlay</div>
+      <p class="app-desc">Radiko streaming and recording app. Server-side recording, CarPlay support, and Live Activities on your Lock Screen.</p>
+      <div class="app-tags">
+        <span class="app-tag">CarPlay</span>
+        <span class="app-tag">Live Activity</span>
+      </div>
+    </a>
+
+    <a class="app-card card-green" href="#">
+      <div class="app-icon" style="background: rgba(61, 220, 132, 0.12);">🪶</div>
+      <h3>K.A.R.A.S.U</h3>
+      <div class="app-platform">iOS · iPadOS · macOS</div>
+      <p class="app-desc">RSS reader with dark reading mode, ad blocking, iCloud sync, and OPML support. Built for focused, distraction-free reading.</p>
+      <div class="app-tags">
+        <span class="app-tag">SwiftData</span>
+        <span class="app-tag">CloudKit</span>
+      </div>
+    </a>
+
+    <a class="app-card card-pink" href="#">
+      <div class="app-icon" style="background: rgba(244, 114, 182, 0.12);">📋</div>
+      <h3>まるちビュ〜ワ〜</h3>
+      <div class="app-platform">iOS</div>
+      <p class="app-desc">Multi-board viewer for 5ch, Bakusai, and X. NG filtering, in-app posting, iCloud bookmark sync, and thread navigation.</p>
+      <div class="app-tags">
+        <span class="app-tag">SwiftUI</span>
+        <span class="app-tag">iCloud</span>
+      </div>
+    </a>
+
+    <a class="app-card card-yellow" href="#">
+      <div class="app-icon" style="background: rgba(251, 191, 36, 0.12);">💱</div>
+      <h3>ExchangeRateWidget</h3>
+      <div class="app-platform">iOS · watchOS</div>
+      <p class="app-desc">Glanceable JPY / THB / MYR exchange rates on your Home Screen and Apple Watch complication.</p>
+      <div class="app-tags">
+        <span class="app-tag">WidgetKit</span>
+        <span class="app-tag">WatchOS</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="section-label">About</div>
+  <h2 class="section-title">Built by one person</h2>
+  <div class="about-content">
+    <div class="about-text">
+      <p>I'm an indie developer based in <strong>Bangkok, Thailand</strong>, building apps that solve my own problems — and hopefully yours too.</p>
+      <br>
+      <p>Most of my apps are born from frustrations with existing tools. Whether it's a radio app that actually records, a board viewer that works across multiple sites, or a party game you can play at a bar — each app starts with a simple "why doesn't this exist?"</p>
+      <br>
+      <p>Built with <strong>Swift, SwiftUI, and SwiftData</strong>, deeply integrated with Apple frameworks like CloudKit, CarPlay, WidgetKit, and Live Activities.</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">10+</div>
+        <div class="stat-label">Apps Built</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Platforms</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">6</div>
+        <div class="stat-label">Languages</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">🇹🇭</div>
+        <div class="stat-label">Bangkok</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="privacy-section" id="privacy">
+  <div class="privacy-card">
+    <h3>Privacy Policy</h3>
+    <p>My apps respect your privacy. They do not collect personal data, do not track you, and do not share information with third parties. Some apps use local storage (iCloud sync, SwiftData) solely for your convenience — your data stays yours.</p>
+    <br>
+    <p style="color: var(--text-dim); font-size: 0.8rem;">For app-specific privacy details, please refer to each app's listing on the App Store.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="https://github.com/kiyo-dev">GitHub</a>
+  </div>
+  <p>&copy; 2026 kiyo-dev. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
